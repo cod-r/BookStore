@@ -9,13 +9,12 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.panea.bookstore.data.BookContract.BookEntry;
-
-import com.example.panea.bookstore.data.BookContract;
 import com.example.panea.bookstore.data.BooksDbHelper;
 
 public class CatalogActivity extends AppCompatActivity {
 
     private BooksDbHelper mDbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +27,7 @@ public class CatalogActivity extends AppCompatActivity {
 
     }
 
-    private void insertBook(){
+    private void insertBook() {
         // Get the database in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a new map of values
@@ -43,7 +42,7 @@ public class CatalogActivity extends AppCompatActivity {
         Log.v("CatalogActivity", "New row id " + newRowId);
     }
 
-    private Cursor queryData(){
+    private Cursor queryData() {
         // Get the database in read mode
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -59,15 +58,33 @@ public class CatalogActivity extends AppCompatActivity {
         return cursor;
     }
 
-    private void displayData(){
+    private void displayData() {
         Cursor cursor = queryData();
         TextView displayView = (TextView) findViewById(R.id.text_view_book);
 
-        try{
-            displayView.setText("The books table contains " + cursor.getCount() + " books.");
+        try {
+            displayView.setText("The books table contains " + cursor.getCount() + " books. \n\n");
+            displayView.append(BookEntry._ID + " - "
+                    + BookEntry.BOOK_PRODUCT_NAME + " - "
+                    + BookEntry.BOOK_PRICE + " - "
+                    + BookEntry.BOOK_QUANTITY + " - "
+                    + BookEntry.BOOK_SUPPLIER_NAME + " - "
+                    + BookEntry.BOOK_SUPPLIER_PHONE + "\n"
+            );
 
-        }
-        finally {
+            // Show database entries
+            while (cursor.moveToNext()) {
+                displayView.append("\n"
+                        + cursor.getInt(cursor.getColumnIndex(BookEntry._ID)) + " - "
+                        + cursor.getString(cursor.getColumnIndex(BookEntry.BOOK_PRODUCT_NAME)) + " - "
+                        + cursor.getInt(cursor.getColumnIndex(BookEntry.BOOK_PRICE)) + " - "
+                        + cursor.getInt(cursor.getColumnIndex(BookEntry.BOOK_QUANTITY)) + " - "
+                        + cursor.getString(cursor.getColumnIndex(BookEntry.BOOK_SUPPLIER_NAME)) + " - "
+                        + cursor.getString(cursor.getColumnIndex(BookEntry.BOOK_SUPPLIER_PHONE))
+                );
+            }
+
+        } finally {
             cursor.close();
         }
     }
