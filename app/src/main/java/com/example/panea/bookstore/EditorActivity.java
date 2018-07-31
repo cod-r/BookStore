@@ -35,7 +35,6 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private static final int EXISTING_BOOK_LOADER = 0;
 
-
     /**
      * Content URI for the existing book (null if it's a new book)
      */
@@ -127,7 +126,7 @@ public class EditorActivity extends AppCompatActivity implements
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_DIAL,
-                            Uri.parse("tel:" +mSupplierPhoneEditText.getText().toString().trim()));
+                            Uri.parse("tel:" + mSupplierPhoneEditText.getText().toString().trim()));
                     startActivity(intent);
                 }
             });
@@ -167,11 +166,11 @@ public class EditorActivity extends AppCompatActivity implements
 
     }
 
-
     /**
      * Get user input from editor and save book into database.
      */
-    private void savePet() {
+    private boolean saveBook() {
+        boolean successSave = true;
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -181,31 +180,26 @@ public class EditorActivity extends AppCompatActivity implements
         String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
 
         // Check if this is supposed to be a new book
-        // and check if all the fields in the editor are blank
-        if (mCurrentBookUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) &&
-                TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierNameString) &&
+        // and check if the fields in the editor are blank
+        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
+                TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(supplierNameString) ||
                 TextUtils.isEmpty(supplierPhoneString)) {
             // Since no fields were modified, we can return early without creating a new book.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            return;
+            successSave = false;
+            Toast.makeText(this, (R.string.no_empty_fields),
+                    Toast.LENGTH_SHORT).show();
+            return successSave;
         }
 
         // Create a ContentValues object where column names are the keys,
-        // and pet attributes from the editor are the values.
+        // and book attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(BookEntry.BOOK_PRODUCT_NAME, nameString);
         values.put(BookEntry.BOOK_PRICE, priceString);
         values.put(BookEntry.BOOK_QUANTITY, quantityString);
         values.put(BookEntry.BOOK_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.BOOK_SUPPLIER_PHONE, supplierPhoneString);
-//        // If the weight is not provided by the user, don't try to parse the string into an
-//        // integer value. Use 0 by default.
-//        int weight = 0;
-//        if (!TextUtils.isEmpty(weightString)) {
-//            weight = Integer.parseInt(weightString);
-//        }
-//        values.put(PetEntry.COLUMN_PET_WEIGHT, weight);
 
         // Determine if this is a new or existing book by checking if mCurrentBookUri is null or not
         if (mCurrentBookUri == null) {
@@ -241,6 +235,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
+        return successSave;
     }
 
     @Override
@@ -272,10 +267,11 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Save pet to database
-                savePet();
-                // Exit activity
-                finish();
+                // Save book to database
+                if (saveBook()) {
+                    // Exit activity
+                    finish();
+                }
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
@@ -284,7 +280,7 @@ public class EditorActivity extends AppCompatActivity implements
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                // If the pet hasn't changed, continue with navigating up to parent activity
+                // If the book hasn't changed, continue with navigating up to parent activity
                 // which is the {@link CatalogActivity}.
                 if (!mBookHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
@@ -315,7 +311,7 @@ public class EditorActivity extends AppCompatActivity implements
      */
     @Override
     public void onBackPressed() {
-        // If the pet hasn't changed, continue with handling back button press
+        // If the book hasn't changed, continue with handling back button press
         if (!mBookHasChanged) {
             super.onBackPressed();
             return;
@@ -338,7 +334,7 @@ public class EditorActivity extends AppCompatActivity implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        // Since the editor shows all pet attributes, define a projection that contains
+        // Since the editor shows all book attributes, define a projection that contains
         // all columns from the book table
         String[] projection = {
                 BookEntry._ID,
@@ -350,7 +346,7 @@ public class EditorActivity extends AppCompatActivity implements
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                mCurrentBookUri,         // Query the content URI for the current pet
+                mCurrentBookUri,         // Query the content URI for the current book
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments
@@ -367,7 +363,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Proceed with moving to the first row of the cursor and reading data from it
         // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
-            // Find the columns of pet attributes that we're interested in
+            // Find the columns of book attributes that we're interested in
             int nameColumnIndex = cursor.getColumnIndex(BookEntry.BOOK_PRODUCT_NAME);
             int priceColumnIndex = cursor.getColumnIndex(BookEntry.BOOK_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(BookEntry.BOOK_QUANTITY);

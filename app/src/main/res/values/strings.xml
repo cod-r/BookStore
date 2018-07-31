@@ -3,17 +3,11 @@
     <!-- Name for the application [CHAR LIMIT=12] -->
     <string name="app_name">Book Store</string>
 
-    <!-- Label for overflow menu option that inserts fake pet data into the app [CHAR LIMIT=20] -->
-    <string name="action_insert_dummy_data">Insert Dummy Data</string>
-
-    <!-- Label for overflow menu option that deletes all pet data in the app [CHAR LIMIT=20] -->
-    <string name="action_delete_all_entries">Delete All Pets</string>
-
     <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
-    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
+    <string name="empty_view_title_text">The book store is empty...</string>
 
-    <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
-    <string name="empty_view_subtitle_text">Get started by adding a pet</string>
+    <!-- Subtitle text for the empty view that prompts the user to add a book [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Get started by adding a book</string>
 
     <!-- Title for the activity to add a new book [CHAR LIMIT=20] -->
     <string name="editor_activity_title_new_book">Add a book</string>
@@ -21,7 +15,7 @@
     <!-- Title for the activity to edit an existing book [CHAR LIMIT=20] -->
     <string name="editor_activity_title_edit_book">Edit Book</string>
 
-    <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
+    <!-- Label for editor menu option to save book and leave editor [CHAR LIMIT=20] -->
     <string name="action_save">Save</string>
 
     <!-- Label for editor overflow menu option that deletes the current book [CHAR LIMIT=20] -->
@@ -49,10 +43,10 @@
     <string name="keep_editing">Keep Editing</string>
 
     <!-- Label for name category of attributes in the editor [CHAR LIMIT=30] -->
-    <string name="category_name">Name: </string>
+    <string name="category_name">Name</string>
 
     <!-- Label for price information in the editor [CHAR LIMIT=30] -->
-    <string name="category_price">Price: </string>
+    <string name="category_price">Price</string>
 
     <!-- Label for quantity information in the editor [CHAR LIMIT=30] -->
     <string name="category_quantity">Quantity</string>
@@ -81,10 +75,16 @@
     <!-- Toast message in editor when current book was successfully deleted [CHAR LIMIT=NONE] -->
     <string name="editor_delete_book_successful">Book deleted</string>
 
-    <!-- Toast message in editor when current pet has failed to be deleted [CHAR LIMIT=NONE] -->
+    <!-- Toast message when all fields are empty [CHAR LIMIT=NONE] -->
+    <string name="no_empty_fields">No empty fields allowed!</string>
+
+    <!-- Toast message when quantity is 0 and user press the sale button [CHAR LIMIT=NONE] -->
+    <string name="book_not_available">Book not available!</string>
+
+    <!-- Toast message in editor when current book has failed to be deleted [CHAR LIMIT=NONE] -->
     <string name="editor_delete_book_failed">Error with deleting book</string>
 
-    <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
+    <!-- Dialog message to ask the user to confirm deleting the current book [CHAR LIMIT=NONE] -->
     <string name="delete_dialog_msg">Delete this book?</string>
 
     <!-- Dialog button text for the option to confirm deleting the current book [CHAR LIMIT=20] -->
@@ -95,5 +95,7 @@
 
     <!-- Button text for the option to buy the current book [CHAR LIMIT=20] -->
     <string name="button_sale">Sale</string>
+
+    <!-- Button text for the option to call the book supplier [CHAR LIMIT=20] -->
     <string name="order_button">Order</string>
 </resources>

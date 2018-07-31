@@ -1,18 +1,4 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package com.example.panea.bookstore;
 
 import android.content.ContentValues;
@@ -76,7 +62,7 @@ public class BookCursorAdapter extends CursorAdapter {
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        Log.v(LOG_TAG, "merge" + cursor.getPosition());
+        Log.v(LOG_TAG, "test" + cursor.getPosition());
         View view = mInflater.inflate(R.layout.list_item, parent, false);
         Holder holder = new Holder(view);
         view.setTag(holder);
@@ -98,8 +84,6 @@ public class BookCursorAdapter extends CursorAdapter {
         final Holder holder = (Holder) view.getTag();
         final int position = cursor.getPosition();
 
-
-
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
@@ -115,9 +99,7 @@ public class BookCursorAdapter extends CursorAdapter {
         String bookPrice = cursor.getString(priceColumnIndex);
         String bookQuantity = cursor.getString(quantityColumnIndex);
 
-
-
-        // Update the TextViews with the attributes for the current pet
+        // Update the TextViews with the attributes for the current book
         nameTextView.setText(bookName);
         priceTextView.setText("Price: " + bookPrice);
         holder.mQuantityTextView.setText("Quantity: " + bookQuantity);
@@ -147,7 +129,7 @@ public class BookCursorAdapter extends CursorAdapter {
                     db.update(BookEntry.TABLE_NAME, values, "_id=" + id, null);
                     db.close();
                 } else {
-                    Toast.makeText(view.getContext(), "The book is not available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), R.string.book_not_available, Toast.LENGTH_SHORT).show();
                 }
             }
         });

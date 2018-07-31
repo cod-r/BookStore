@@ -46,7 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_book_price"
-            android:inputType="textCapWords" />
+            android:digits="0123456789"
+            android:inputType="phone" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,10 +62,12 @@
         <EditText
             android:id="@+id/edit_book_quantity"
             style="@style/EditorFieldStyle"
-            android:layout_weight="3"
             android:layout_height="wrap_content"
+            android:digits="0123456789"
+            android:layout_weight="3"
             android:hint="@string/hint_book_quantity"
-            android:inputType="textCapWords" />
+            android:text="0"
+            android:inputType="phone" />
 
         <Button
             android:id="@+id/sub_one_from_quantity"

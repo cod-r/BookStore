@@ -55,10 +55,9 @@ public class CatalogActivity extends AppCompatActivity
 
 
         // Setup an Adapter to create a list item for each row of book data in the Cursor.
-        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
+        // There is no book data yet (until the loader finishes) so pass in null for the Cursor.
         mCursorAdapter = new BookCursorAdapter(this, null);
         bookListView.setAdapter(mCursorAdapter);
-
 
         // Setup the item click listener
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,10 +69,10 @@ public class CatalogActivity extends AppCompatActivity
                 // Form the content URI that represents the specific book that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
                 // {@link BookEntry#CONTENT_URI}.
-                Uri currentPetUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
 
                 // Set the URI on the data field of the intent
-                intent.setData(currentPetUri);
+                intent.setData(currentBookUri);
 
                 // Launch the {@link EditorActivity} to display the data for the current book.
                 startActivity(intent);
@@ -83,21 +82,6 @@ public class CatalogActivity extends AppCompatActivity
         // Kick off the loader
         getLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
-
-
-    private void insertBook() {
-
-        // Create a new map of values
-        ContentValues values = new ContentValues();
-        values.put(BookEntry.BOOK_PRODUCT_NAME, "The Book");
-        values.put(BookEntry.BOOK_PRICE, 4);
-        values.put(BookEntry.BOOK_QUANTITY, 13);
-        values.put(BookEntry.BOOK_SUPPLIER_NAME, "The Book Supplier");
-        values.put(BookEntry.BOOK_SUPPLIER_PHONE, "+40765432101");
-
-        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
-    }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -122,7 +106,7 @@ public class CatalogActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Update {@link PetCursorAdapter} with this new cursor containing updated book data
+        // Update {@link BookCursorAdapter} with this new cursor containing updated book data
         mCursorAdapter.swapCursor(data);
     }
 

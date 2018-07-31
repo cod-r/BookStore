@@ -1,18 +1,4 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package com.example.panea.bookstore.data;
 
 import android.content.ContentProvider;
@@ -27,17 +13,17 @@ import android.util.Log;
 import com.example.panea.bookstore.data.BookContract.BookEntry;
 
 /**
- * {@link ContentProvider} for Pets app.
+ * {@link ContentProvider} for BookStore app.
  */
 public class BookProvider extends ContentProvider {
 
     /** Tag for the log messages */
     public static final String LOG_TAG = BookProvider.class.getSimpleName();
 
-    /** URI matcher code for the content URI for the pets table */
+    /** URI matcher code for the content URI for the books table */
     private static final int BOOKS = 100;
 
-    /** URI matcher code for the content URI for a single pet in the pets table */
+    /** URI matcher code for the content URI for a single book in the books table */
     private static final int BOOK_ID = 101;
 
     /**
@@ -52,19 +38,7 @@ public class BookProvider extends ContentProvider {
         // The calls to addURI() go here, for all of the content URI patterns that the provider
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
-
-        // The content URI of the form "content://com.example.android.pets/pets" will map to the
-        // integer code {@link #BOOKS}. This URI is used to provide access to MULTIPLE rows
-        // of the pets table.
         sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS, BOOKS);
-
-        // The content URI of the form "content://com.example.android.pets/pets/#" will map to the
-        // integer code {@link #BOOK_ID}. This URI is used to provide access to ONE single row
-        // of the pets table.
-        //
-        // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
-        // For example, "content://com.example.android.pets/pets/3" matches, but
-        // "content://com.example.android.pets/pets" (without a number at the end) doesn't match.
         sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS + "/#", BOOK_ID);
     }
 
@@ -90,25 +64,17 @@ public class BookProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case BOOKS:
-                // For the BOOKS code, query the pets table directly with the given
+                // For the BOOKS code, query the books table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
-                // could contain multiple rows of the pets table.
+                // could contain multiple rows of the books table.
                 cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case BOOK_ID:
-                // For the BOOK_ID code, extract out the ID from the URI.
-                // For an example URI such as "content://com.example.android.pets/pets/3",
-                // the selection will be "_id=?" and the selection argument will be a
-                // String array containing the actual ID of 3 in this case.
-                //
-                // For every "?" in the selection, we need to have an element in the selection
-                // arguments that will fill in the "?". Since we have 1 question mark in the
-                // selection, we have 1 String in the selection arguments' String array.
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
-                // This will perform a query on the pets table where the _id equals 3 to return a
+                // This will perform a query on the books table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -157,7 +123,7 @@ public class BookProvider extends ContentProvider {
         // If the quantity is provided, check that it's greater than or equal to 0
         Integer quantity = values.getAsInteger(BookEntry.BOOK_QUANTITY);
         if (quantity != null && quantity < 0) {
-            throw new IllegalArgumentException("Pet requires valid weight");
+            throw new IllegalArgumentException("Book requires valid weight");
         }
 
         // Get writable database
@@ -212,7 +178,7 @@ public class BookProvider extends ContentProvider {
             }
         }
 
-        // If the {@link PetEntry#BOOK_PRICE} key is present,
+        // If the {@link BookEntry#BOOK_PRICE} key is present,
         // check that the price value is valid.
         if (values.containsKey(BookEntry.BOOK_PRICE)) {
             Integer price = values.getAsInteger(BookEntry.BOOK_PRICE);
@@ -221,7 +187,7 @@ public class BookProvider extends ContentProvider {
             }
         }
 
-        // If the {@link PetEntry#BOOK_QUANTITY} key is present,
+        // If the {@link BookEntry#BOOK_QUANTITY} key is present,
         // check that the quantity value is valid.
         if (values.containsKey(BookEntry.BOOK_QUANTITY)) {
             // Check that the quantity is greater than or equal to 0 kg
@@ -230,8 +196,6 @@ public class BookProvider extends ContentProvider {
                 throw new IllegalArgumentException("Quantity must be positive");
             }
         }
-
-        // No need to check for supplier, any value is valid (including null).
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
